@@ -1,24 +1,24 @@
--- CreateAdmin :exec
+-- name: CreateAdmin :exec
 INSERT INTO admins VALUES (
     $1, $2, $3, $4, $5
 );
 
--- CreateUser :exec
+-- name: CreateUser :exec
 INSERT INTO users VALUES (
     $1, $2, $3, $4, $5
 );
 
--- CreateGeneralExercise :exec
+-- name: CreateGeneralExercise :exec
 INSERT INTO generalExercises VALUES (
     $1, $2, $3, $4
 );
 
--- CreateUserExercise :exec
+-- name: CreateUserExercise :exec
 INSERT INTO userExercises VALUES (
     $1, $2, $3, $4
 );
 
--- CreateWorkout :exec
+-- name: CreateWorkout :exec
 INSERT INTO workouts VALUES (
     $1, $2, $3, $4, $5
 );
