@@ -23,14 +23,14 @@ CREATE TABLE generalExercises (
     adminGuid UUID NOT NULL REFERENCES admins(guid),
     name TEXT NOT NULL,
     description TEXT NOT NULL
-)
+);
 
 CREATE TABLE userExercises (
     guid UUID PRIMARY KEY,
     userGuid UUID NOT NULL REFERENCES users(guid),
     name TEXT NOT NULL,
     description TEXT NOT NULL
-)
+);
 
 CREATE TABLE workouts (
     guid UUID PRIMARY KEY,
@@ -38,4 +38,4 @@ CREATE TABLE workouts (
     scheduledFor TIMESTAMP NOT NULL,
     durationInMinutes DOUBLE PRECISION NOT NULL,
     setsAndBreaks JSONB NOT NULL
-)
+);
