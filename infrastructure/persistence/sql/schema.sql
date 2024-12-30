@@ -4,7 +4,7 @@ CREATE TABLE admins (
     name TEXT NOT NULL,
     login TEXT NOT NULL,
     password TEXT NOT NULL,
-    CONSTRAINT uq_admins_login UNIQUE (login)
+    CONSTRAINT uq_admins_login UNIQUE (login),
     CONSTRAINT uq_admins_loginAndPassword UNIQUE (login, password)
 );
 
@@ -14,7 +14,7 @@ CREATE TABLE users (
     name TEXT NOT NULL,
     login TEXT NOT NULL,
     password TEXT NOT NULL,
-    CONSTRAINT uq_users_login UNIQUE (login)
+    CONSTRAINT uq_users_login UNIQUE (login),
     CONSTRAINT uq_users_loginAndPassword UNIQUE (login, password)
 );
 
