@@ -4,6 +4,8 @@ import "github.com/google/uuid"
 
 type GuidProvider struct{}
 
-func (*GuidProvider) Random() [16]byte {
-	return [16]byte(uuid.New())
+func (*GuidProvider) Random() []byte {
+	guid := uuid.New()
+	byteArrayOfGuid := [16]byte(guid)
+	return byteArrayOfGuid[:]
 }

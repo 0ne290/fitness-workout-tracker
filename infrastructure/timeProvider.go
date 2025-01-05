@@ -2,8 +2,8 @@ package infrastructure
 
 import "time"
 
-type timeProvider struct{}
+type TimeProvider struct{}
 
-func (*timeProvider) UtcNow() time.Time {
+func (*TimeProvider) UtcNow() time.Time {
 	return time.Now().UTC()
 }

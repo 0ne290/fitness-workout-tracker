@@ -1,4 +1,4 @@
-package infrastructure
+package persistence
 
 import (
 	"context"
@@ -7,14 +7,16 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-type repository struct {
+type Repository struct {
 	transaction pgx.Tx
 }
 
-func NewRepository(transaction pgx.Tx) *repository {
-	return &repository{transaction}
+func newRepository(transaction pgx.Tx) *Repository {
+	return &Repository{transaction}
 }
 
-func (repository *repository) AddAdmin(ctx context.Context, admin entities.Admin) {
-	repository.transaction.Exec(ctx, "INSERT INTO admins VALUES ($1, $2, $3, $4, $5)", admin.Guid, admin.CreatedAt, admin.Name, admin.Login, admin.Password)
+func (repository *Repository) AddAdmin(ctx context.Context, admin *entities.Admin) {
+	if _, err := repository.transaction.Exec(ctx, "INSERT INTO admins VALUES ($1, $2, $3, $4, $5)", admin.Guid, admin.CreatedAt, admin.Name, admin.Login, admin.Password); err != nil {
+		panic("infrastructure.Repository.AddAdmin(): transaction.Exec() error. Detail :" + err.Error())
+	}
 }
