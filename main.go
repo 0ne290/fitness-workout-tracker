@@ -19,7 +19,7 @@ func main() {
 		return
 	}
 
-	pool, err := pgxpool.New(context.Background(), "User ID=root;Password=dcba;Host=localhost;Port=5432;Database=fitness-workout-tracker;Pooling=true;Min Pool Size=0;Max Pool Size=100;Connection Lifetime=0;")
+	pool, err := pgxpool.New(context.Background(), "user=root password=dcba host=localhost port=5432 dbname=fitness_workout_tracker")
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -30,4 +30,5 @@ func main() {
 	unitOfWork := persistence.NewUnitOfWork(pool)
 	repository := unitOfWork.Begin(context)
 	repository.AddAdmin(context, admin)
+	unitOfWork.Save(context)
 }
