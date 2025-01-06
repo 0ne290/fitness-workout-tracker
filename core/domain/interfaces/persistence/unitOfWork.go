@@ -1,8 +1,9 @@
-package interfaces
+package persistence
 
 import "context"
 
-type unitOfWork interface {
-	Begin(ctx context.Context) *repository
+type UnitOfWork interface {
+	Repository() Repository
 	Save(ctx context.Context)
+	Rollback(ctx context.Context)
 }

@@ -35,11 +35,11 @@ func NewAdmin(hasher hash.Hash, timeProvider interfaces.TimeProvider, guidProvid
 
 	guid := guidProvider.Random()
 	createdAt := timeProvider.UtcNow()
-	hasher.Write(Salt(guid, password, createdAt))
+	hasher.Write(Salt(guidProvider, guid, password, createdAt))
 
 	return &Admin{guid, createdAt, name, login, hasher.Sum(nil)}, nil
 }
 
-func Salt(guid []byte, password string, createdAt time.Time) []byte {
-	return []byte(string(guid) + password + createdAt.String() + "|oIFK>w static_part_of_salt ;wI+Jrg")
+func Salt(guidProvider interfaces.GuidProvider, guid []byte, password string, createdAt time.Time) []byte {
+	return []byte(guidProvider.String(guid) + password + createdAt.String() + "|oIFK>w static_part_of_salt ;wI+Jrg")
 }

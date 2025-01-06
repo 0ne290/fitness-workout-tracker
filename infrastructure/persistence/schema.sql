@@ -1,5 +1,3 @@
-CREATE DATABASE fitness_workout_tracker;
-
 CREATE TABLE IF NOT EXISTS admins (
     guid UUID PRIMARY KEY,
     createdAt TIMESTAMP NOT NULL,

@@ -3,16 +3,19 @@ package main
 import (
 	"context"
 	"crypto/sha512"
+	"encoding/hex"
 	"fmt"
 
 	"github.com/0ne290/fitness-workout-tracker/core/domain/entities"
+	interfacesPersistence "github.com/0ne290/fitness-workout-tracker/core/domain/interfaces/persistence"
 	"github.com/0ne290/fitness-workout-tracker/infrastructure"
-	"github.com/0ne290/fitness-workout-tracker/infrastructure/persistence"
+	infrastructurePersistence "github.com/0ne290/fitness-workout-tracker/infrastructure/persistence"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 func main() {
-	admin, err := entities.NewAdmin(sha512.New(), &infrastructure.TimeProvider{}, &infrastructure.GuidProvider{}, "One290", "AnyLogin", "AnyPassword1")
+	guidProvider := &infrastructure.GuidProvider{}
+	admin, err := entities.NewAdmin(sha512.New(), &infrastructure.TimeProvider{}, guidProvider, "One290", "AnyLogin", "AnyPassword1")
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -27,8 +30,27 @@ func main() {
 	}
 
 	context := context.Background()
-	unitOfWork := persistence.NewUnitOfWork(pool)
-	repository := unitOfWork.Begin(context)
-	repository.AddAdmin(context, admin)
+	var unitOfWork interfacesPersistence.UnitOfWork
+
+	unitOfWork = infrastructurePersistence.NewUnitOfWork(context, pool)
+	unitOfWork.Repository().AddAdmin(context, admin)
 	unitOfWork.Save(context)
+
+	unitOfWork = infrastructurePersistence.NewUnitOfWork(context, pool)
+	admin1 := unitOfWork.Repository().TryGetAdminByGuid(context, admin.Guid)
+	unitOfWork.Rollback(context)
+
+	fmt.Println("Admin:")
+	fmt.Println(guidProvider.String(admin.Guid))
+	fmt.Println(admin.CreatedAt)
+	fmt.Println(admin.Name)
+	fmt.Println(admin.Login)
+	fmt.Println(hex.EncodeToString(admin.Password))
+
+	fmt.Println("\nAdmin1:")
+	fmt.Println(guidProvider.String(admin1.Guid))
+	fmt.Println(admin1.CreatedAt)
+	fmt.Println(admin1.Name)
+	fmt.Println(admin1.Login)
+	fmt.Println(hex.EncodeToString(admin1.Password))
 }

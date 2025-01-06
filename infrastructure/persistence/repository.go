@@ -20,3 +20,19 @@ func (repository *Repository) AddAdmin(ctx context.Context, admin *entities.Admi
 		panic("infrastructure.Repository.AddAdmin(): transaction.Exec() error. Detail :" + err.Error())
 	}
 }
+
+func (repository *Repository) TryGetAdminByGuid(ctx context.Context, guid []byte) *entities.Admin {
+	admin := &entities.Admin{}
+
+	err := repository.transaction.QueryRow(ctx, "SELECT * FROM admins WHERE guid = $1", guid).Scan(&admin.Guid, &admin.CreatedAt, &admin.Name, &admin.Login, &admin.Password)
+
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil
+		}
+
+		panic("infrastructure.Repository.TryGetAdminByGuid(): row.Scan() error. Detail: " + err.Error())
+	}
+
+	return admin
+}
